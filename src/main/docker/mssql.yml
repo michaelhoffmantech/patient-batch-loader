@@ -1,0 +1,12 @@
+version: '2'
+services:
+    patientbatchloader-mssql:
+        image: microsoft/mssql-server-linux:latest
+        # volumes are not supported on macOS
+        # volumes:
+        #     - ~/volumes/jhipster/jhitest/mssql/:/var/opt/mssql/data/
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=yourStrong(!)Password
+        ports:
+            - 1433:1433
