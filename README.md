@@ -7,10 +7,7 @@ To start your application in the dev profile, simply run:
 
     ./gradlew
 
-
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
-
-
 
 ## Building for production
 
@@ -21,7 +18,6 @@ To optimize the PatientBatchLoader application for production, run:
 To ensure everything worked, run:
 
     java -jar build/libs/*.war
-
 
 Refer to [Using JHipster in production][] for more details.
 

@@ -6,9 +6,83 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Properties specific to Patient Batch Loader.
  * <p>
  * Properties are configured in the application.yml file.
- * See {@link io.github.jhipster.config.JHipsterProperties} for a good example.
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
+    private final Mail mail = new Mail();
+
+    private final Metrics metrics = new Metrics();
+
+    public Mail getMail() {
+        return mail;
+    }
+
+    public Metrics getMetrics() {
+        return metrics;
+    }
+
+    public static class Mail {
+
+        private String from = "";
+
+        public String getFrom() {
+            return from;
+        }
+
+        public void setFrom(String from) {
+            this.from = from;
+        }
+    }
+
+    public static class Metrics {
+
+        private final Jmx jmx = new Jmx();
+
+        private final Logs logs = new Logs();
+
+        public Jmx getJmx() {
+            return jmx;
+        }
+
+        public Logs getLogs() {
+            return logs;
+        }
+
+        public static class Jmx {
+
+            private boolean enabled = true;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
+
+        public static class Logs {
+
+            private boolean enabled = false;
+
+            private long reportFrequency = 60;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public long getReportFrequency() {
+                return reportFrequency;
+            }
+
+            public void setReportFrequency(long reportFrequency) {
+                this.reportFrequency = reportFrequency;
+            }
+        }
+    }
 }

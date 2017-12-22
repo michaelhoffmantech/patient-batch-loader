@@ -9,14 +9,9 @@ if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
 
-if (project.hasProperty('swagger')) {
-    profiles += ',swagger'
-}
-
 bootRun {
     args = []
 }
-
 
 processResources {
     filesMatching('**/application.yml') {

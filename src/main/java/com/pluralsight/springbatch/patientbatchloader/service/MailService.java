@@ -1,8 +1,8 @@
 package com.pluralsight.springbatch.patientbatchloader.service;
 
-import com.pluralsight.springbatch.patientbatchloader.domain.User;
+import java.util.Locale;
 
-import io.github.jhipster.config.JHipsterProperties;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import javax.mail.internet.MimeMessage;
-import java.util.Locale;
+import com.pluralsight.springbatch.patientbatchloader.config.ApplicationProperties;
+import com.pluralsight.springbatch.patientbatchloader.config.Constants;
 
 /**
  * Service for sending emails.
@@ -28,11 +28,7 @@ public class MailService {
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
-    private static final String USER = "user";
-
-    private static final String BASE_URL = "baseUrl";
-
-    private final JHipsterProperties jHipsterProperties;
+    private final ApplicationProperties applicationProperties;
 
     private final JavaMailSender javaMailSender;
 
@@ -40,10 +36,9 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
-    public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
+    public MailService(ApplicationProperties applicationProperties, JavaMailSender javaMailSender,
             MessageSource messageSource, SpringTemplateEngine templateEngine) {
-
-        this.jHipsterProperties = jHipsterProperties;
+        this.applicationProperties = applicationProperties;
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
@@ -59,7 +54,7 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
             message.setTo(to);
-            message.setFrom(jHipsterProperties.getMail().getFrom());
+            message.setFrom(applicationProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
@@ -74,32 +69,20 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
-        Locale locale = Locale.forLanguageTag(user.getLangKey());
+    public void sendEmailFromTemplate(String email, String templateName, String titleKey) {
+        Locale locale = Locale.forLanguageTag(Constants.DEFAULT_LANG_KEY);
         Context context = new Context(locale);
-        context.setVariable(USER, user);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        // context.setVariable(USER, user);
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true);
+        sendEmail(email, subject, content, false, true);
 
     }
 
-    @Async
-    public void sendActivationEmail(User user) {
-        log.debug("Sending activation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "activationEmail", "email.activation.title");
-    }
+//    @Async
+//    public void sendActivationEmail(User user) {
+//        log.debug("Sending activation email to '{}'", user.getEmail());
+//        sendEmailFromTemplate(user, "activationEmail", "email.activation.title");
+//    }
 
-    @Async
-    public void sendCreationEmail(User user) {
-        log.debug("Sending creation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "creationEmail", "email.activation.title");
-    }
-
-    @Async
-    public void sendPasswordResetMail(User user) {
-        log.debug("Sending password reset email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "passwordResetEmail", "email.reset.title");
-    }
 }

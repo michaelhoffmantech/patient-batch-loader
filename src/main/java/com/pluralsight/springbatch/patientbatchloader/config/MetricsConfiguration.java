@@ -1,7 +1,5 @@
 package com.pluralsight.springbatch.patientbatchloader.config;
 
-import io.github.jhipster.config.JHipsterProperties;
-
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.JvmAttributeGaugeSet;
 import com.codahale.metrics.MetricRegistry;
@@ -39,12 +37,12 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     private HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
 
-    private final JHipsterProperties jHipsterProperties;
+    private final ApplicationProperties applicationProperties;
 
     private HikariDataSource hikariDataSource;
 
-    public MetricsConfiguration(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
+    public MetricsConfiguration(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
     }
 
     @Autowired(required = false)
@@ -77,12 +75,12 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
             log.debug("Monitoring the datasource");
             hikariDataSource.setMetricRegistry(metricRegistry);
         }
-        if (jHipsterProperties.getMetrics().getJmx().isEnabled()) {
+        if (applicationProperties.getMetrics().getJmx().isEnabled()) {
             log.debug("Initializing Metrics JMX reporting");
             JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
             jmxReporter.start();
         }
-        if (jHipsterProperties.getMetrics().getLogs().isEnabled()) {
+        if (applicationProperties.getMetrics().getLogs().isEnabled()) {
             log.info("Initializing Metrics Log reporting");
             Marker metricsMarker = MarkerFactory.getMarker("metrics");
             final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
@@ -91,7 +89,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
-            reporter.start(jHipsterProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
+            reporter.start(applicationProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
         }
     }
 }

@@ -5,8 +5,6 @@
 
     <logger name="com.pluralsight.springbatch.patientbatchloader" level="INFO"/>
 
-    <logger name="io.github.jhipster" level="WARN"/>
-
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>

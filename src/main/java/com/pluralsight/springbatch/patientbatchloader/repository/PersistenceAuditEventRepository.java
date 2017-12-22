@@ -13,13 +13,13 @@ import java.util.List;
  */
 public interface PersistenceAuditEventRepository extends JpaRepository<PersistentAuditEvent, Long> {
 
-    List<PersistentAuditEvent> findByPrincipal(String principal);
+    List<PersistentAuditEvent> findByUserId(String userId);
 
     List<PersistentAuditEvent> findByAuditEventDateAfter(Instant after);
 
-    List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfter(String principal, Instant after);
+    List<PersistentAuditEvent> findByUserIdAndAuditEventDateAfter(String userId, Instant after);
 
-    List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfterAndAuditEventType(String principle, Instant after, String type);
+    List<PersistentAuditEvent> findByUserIdAndAuditEventDateAfterAndAuditEventType(String userId, Instant after, String type);
 
     Page<PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable);
 }
