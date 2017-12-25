@@ -67,7 +67,7 @@ public class CustomAuditEventRepositoryIntTest {
         testOldUserEvent.setAuditEventDate(oneHourAgo.minusSeconds(10000));
 
         testOtherUserEvent = new PersistentAuditEvent();
-        testOtherUserEvent.setUserId(Constants.SYSTEM_ACCOUNT);
+        testOtherUserEvent.setUserId("other-test-user");
         testOtherUserEvent.setAuditEventType("test-type");
         testOtherUserEvent.setAuditEventDate(oneHourAgo);
     }
@@ -95,7 +95,7 @@ public class CustomAuditEventRepositoryIntTest {
         persistenceAuditEventRepository.save(testOtherUserEvent);
 
         List<AuditEvent> events = customAuditEventRepository
-            .find("test-user", Date.from(testUserEvent.getAuditEventDate().minusSeconds(3600)));
+            .find(Constants.SYSTEM_ACCOUNT, Date.from(testUserEvent.getAuditEventDate().minusSeconds(3600)));
         assertThat(events).hasSize(1);
         AuditEvent event = events.get(0);
         assertThat(event.getPrincipal()).isEqualTo(testUserEvent.getUserId());
@@ -110,20 +110,9 @@ public class CustomAuditEventRepositoryIntTest {
         persistenceAuditEventRepository.save(testUserEvent);
         persistenceAuditEventRepository.save(testOtherUserEvent);
 
-        List<AuditEvent> events = customAuditEventRepository.find("test-user", null);
+        List<AuditEvent> events = customAuditEventRepository.find(Constants.SYSTEM_ACCOUNT, null);
         assertThat(events).hasSize(1);
-        assertThat(events.get(0).getPrincipal()).isEqualTo("test-user");
-    }
-
-    @Test
-    public void testFindByPrincipalIsNullAndAfterIsNull() {
-        persistenceAuditEventRepository.save(testUserEvent);
-        persistenceAuditEventRepository.save(testOtherUserEvent);
-
-        List<AuditEvent> events = customAuditEventRepository.find(null, null);
-        assertThat(events).hasSize(2);
-        assertThat(events).extracting("principal")
-            .containsExactlyInAnyOrder("test-user", "other-test-user");
+        assertThat(events.get(0).getPrincipal()).isEqualTo(Constants.SYSTEM_ACCOUNT);
     }
 
     @Test
@@ -140,8 +129,8 @@ public class CustomAuditEventRepositoryIntTest {
         testUserOtherTypeEvent.setAuditEventDate(testUserEvent.getAuditEventDate());
         persistenceAuditEventRepository.save(testUserOtherTypeEvent);
 
-        List<AuditEvent> events = customAuditEventRepository.find("test-user",
-            Date.from(testUserEvent.getAuditEventDate().minusSeconds(3600)), "test-type");
+        List<AuditEvent> events = customAuditEventRepository.find(Constants.SYSTEM_ACCOUNT,
+        		Date.from(testUserEvent.getAuditEventDate().minusSeconds(3600)), "test-type");
         assertThat(events).hasSize(1);
         AuditEvent event = events.get(0);
         assertThat(event.getPrincipal()).isEqualTo(testUserEvent.getUserId());
@@ -155,7 +144,7 @@ public class CustomAuditEventRepositoryIntTest {
     public void addAuditEvent() {
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", "test-value");
-        AuditEvent event = new AuditEvent("test-user", "test-type", data);
+        AuditEvent event = new AuditEvent(Constants.SYSTEM_ACCOUNT, "test-type", data);
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);
@@ -175,7 +164,7 @@ public class CustomAuditEventRepositoryIntTest {
             largeData.append("a");
         }
         data.put("test-key", largeData);
-        AuditEvent event = new AuditEvent("test-user", "test-type", data);
+        AuditEvent event = new AuditEvent(Constants.SYSTEM_ACCOUNT, "test-type", data);
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);
@@ -193,7 +182,7 @@ public class CustomAuditEventRepositoryIntTest {
     public void testAddEventWithNullData() {
         Map<String, Object> data = new HashMap<>();
         data.put("test-key", null);
-        AuditEvent event = new AuditEvent("test-user", "test-type", data);
+        AuditEvent event = new AuditEvent(Constants.SYSTEM_ACCOUNT, "test-type", data);
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);

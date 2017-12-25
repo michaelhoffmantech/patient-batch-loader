@@ -24,7 +24,7 @@ spring:
         username:
         password:
     jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
+        database-platform: com.pluralsight.springbatch.patientbatchloader.config.FixedH2Dialect
         database: H2
         open-in-view: false
         show-sql: false
@@ -39,10 +39,6 @@ spring:
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
-    mail:
-        host: localhost
-    thymeleaf:
-        mode: XHTML
 
 liquibase:
     contexts: test
@@ -56,8 +52,6 @@ info:
 # ===================================================================
 
 application:
-    mail:
-        from: test@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         logs: # Reports Dropwizard metrics in the logs

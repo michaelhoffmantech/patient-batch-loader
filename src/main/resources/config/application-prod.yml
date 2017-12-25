@@ -39,13 +39,6 @@ spring:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: false
-    mail:
-        host: localhost
-        port: 25
-        username:
-        password:
-    thymeleaf:
-        cache: true
 
 liquibase:
     contexts: prod
@@ -55,8 +48,6 @@ liquibase:
 # ===================================================================
 
 application:
-    mail: 
-        from: PatientBatchLoader@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         logs: # Reports Dropwizard metrics in the logs

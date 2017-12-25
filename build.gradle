@@ -29,6 +29,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'propdeps'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
+apply plugin: 'project-report'
 
 defaultTasks 'bootRun'
 
@@ -127,7 +128,6 @@ dependencies {
     compile "org.apache.commons:commons-lang3"
     compile "commons-io:commons-io:${commons_io_version}"
     compile "javax.transaction:javax.transaction-api"
-    compile "org.hibernate:hibernate-entitymanager"
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
     compile "org.liquibase:liquibase-core"
@@ -135,14 +135,13 @@ dependencies {
     compile "org.springframework.boot:spring-boot-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.springframework.boot:spring-boot-loader-tools"
-    compile "org.springframework.boot:spring-boot-starter-mail"
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-starter-aop"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.springframework:spring-context-support"
     compile "com.microsoft.sqlserver:mssql-jdbc"
     compile "com.github.sabomichal:liquibase-mssql:${liquibase_mssql_version}"
+    
     testCompile "com.jayway.jsonpath:json-path"
     testCompile ("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'

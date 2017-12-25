@@ -10,29 +10,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
-    private final Mail mail = new Mail();
-
     private final Metrics metrics = new Metrics();
-
-    public Mail getMail() {
-        return mail;
-    }
 
     public Metrics getMetrics() {
         return metrics;
-    }
-
-    public static class Mail {
-
-        private String from = "";
-
-        public String getFrom() {
-            return from;
-        }
-
-        public void setFrom(String from) {
-            this.from = from;
-        }
     }
 
     public static class Metrics {

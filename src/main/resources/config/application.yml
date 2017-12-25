@@ -29,8 +29,6 @@ spring:
             naming:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-    thymeleaf:
-        mode: XHTML
 security:
     basic:
         enabled: false
@@ -44,5 +42,3 @@ info:
 # ===================================================================
 
 application:
-    mail:
-        from: PatientBatchLoader@localhost
