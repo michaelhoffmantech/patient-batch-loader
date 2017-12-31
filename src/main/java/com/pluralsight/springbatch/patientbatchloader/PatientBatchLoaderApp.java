@@ -21,6 +21,9 @@ import com.pluralsight.springbatch.patientbatchloader.config.ApplicationProperti
 import com.pluralsight.springbatch.patientbatchloader.config.Constants;
 import com.pluralsight.springbatch.patientbatchloader.config.DefaultProfileUtil;
 
+/**
+ * Main Spring Boot application definition. 
+ */
 @ComponentScan
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class })
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })

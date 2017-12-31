@@ -16,8 +16,6 @@ import com.pluralsight.springbatch.patientbatchloader.config.Constants;
 
 /**
  * Aspect for logging execution of service and repository Spring components.
- *
- * By default, it only runs with the "dev" profile.
  */
 @Aspect
 public class LoggingAspect {
@@ -34,8 +32,7 @@ public class LoggingAspect {
 	 * Pointcut that matches all repositories, services and Web REST endpoints.
 	 */
 	@Pointcut("within(@org.springframework.stereotype.Repository *)"
-			+ " || within(@org.springframework.stereotype.Service *)"
-			+ " || within(@org.springframework.web.bind.annotation.RestController *)")
+			+ " || within(@org.springframework.stereotype.Service *)")
 	public void springBeanPointcut() {
 		// Method is empty as this is just a Pointcut, the implementations are in the
 		// advices.
@@ -45,8 +42,7 @@ public class LoggingAspect {
 	 * Pointcut that matches all Spring beans in the application's main packages.
 	 */
 	@Pointcut("within(com.pluralsight.springbatch.patientbatchloader.repository..*)"
-			+ " || within(com.pluralsight.springbatch.patientbatchloader.service..*)"
-			+ " || within(com.pluralsight.springbatch.patientbatchloader.web.rest..*)")
+			+ " || within(com.pluralsight.springbatch.patientbatchloader.service..*)")
 	public void applicationPackagePointcut() {
 		// Method is empty as this is just a Pointcut, the implementations are in the
 		// advices.

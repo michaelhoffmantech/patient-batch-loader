@@ -6,6 +6,10 @@ import java.time.Instant;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+/**
+ * Converter for supporting new time apis with H2. Provides conversion between
+ * Instant and Timestamp.
+ */
 @Converter(autoApply = true)
 public class InstantTimeJPAConverter implements AttributeConverter<Instant, Timestamp> {
 
@@ -16,7 +20,7 @@ public class InstantTimeJPAConverter implements AttributeConverter<Instant, Time
 
 	@Override
 	public Instant convertToEntityAttribute(Timestamp timestamp) {
-		return (timestamp == null ? null : timestamp.toInstant()); 
+		return (timestamp == null ? null : timestamp.toInstant());
 	}
 
 }

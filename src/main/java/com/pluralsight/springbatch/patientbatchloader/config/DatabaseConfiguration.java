@@ -1,27 +1,26 @@
 package com.pluralsight.springbatch.patientbatchloader.config;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.SQLException;
-
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
-import org.springframework.core.task.SyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import liquibase.integration.spring.SpringLiquibase;
 
+/**
+ * Database configurations for the spring batch application. For the purposes of
+ * this course, I'm simply leveraing an H2 database; however, its recommended
+ * that you using a real production database server for all non-development
+ * implementations. Includes support for JPA auditing.
+ *
+ */
 @Configuration
 @EnableJpaRepositories("com.pluralsight.springbatch.patientbatchloader.repository")
 @EnableJpaAuditing(auditorAwareRef = "systemAccountAuditorAware")
@@ -36,48 +35,8 @@ public class DatabaseConfiguration {
 		this.env = env;
 	}
 
-	/**
-	 * Open the TCP port for the H2 database, so it is available remotely.
-	 *
-	 * @return the H2 database TCP server
-	 * @throws SQLException
-	 *             if the server failed to start
-	 */
-	@Bean(initMethod = "start", destroyMethod = "stop")
-	@Profile(Constants.SPRING_PROFILE_DEVELOPMENT)
-	public Object h2TCPServer() throws SQLException {
-		try {
-			// We don't want to include H2 when we are packaging for the "prod" profile and
-			// won't
-			// actually need it, so we have to load / invoke things at runtime through
-			// reflection.
-			ClassLoader loader = Thread.currentThread().getContextClassLoader();
-			Class<?> serverClass = Class.forName("org.h2.tools.Server", true, loader);
-			Method createServer = serverClass.getMethod("createTcpServer", String[].class);
-			return createServer.invoke(null, new Object[] { new String[] { "-tcp", "-tcpAllowOthers" } });
-		} catch (ClassNotFoundException | LinkageError e) {
-			throw new RuntimeException("Failed to load and initialize org.h2.tools.Server", e);
-		} catch (SecurityException | NoSuchMethodException e) {
-			throw new RuntimeException("Failed to get method org.h2.tools.Server.createTcpServer()", e);
-		} catch (IllegalAccessException | IllegalArgumentException e) {
-			throw new RuntimeException("Failed to invoke org.h2.tools.Server.createTcpServer()", e);
-		} catch (InvocationTargetException e) {
-			Throwable t = e.getTargetException();
-			if (t instanceof SQLException) {
-				throw (SQLException) t;
-			}
-			throw new RuntimeException("Unchecked exception in org.h2.tools.Server.createTcpServer()", t);
-		}
-	}
-
 	@Bean
-	public TaskExecutor taskExecutor() {
-		return new SyncTaskExecutor(); 
-	}
-	
-	@Bean
-	public SpringLiquibase liquibase(@Qualifier("taskExecutor") TaskExecutor taskExecutor, DataSource dataSource,
-			LiquibaseProperties liquibaseProperties) {
+	public SpringLiquibase liquibase(DataSource dataSource, LiquibaseProperties liquibaseProperties) {
 		SpringLiquibase liquibase = new SpringLiquibase();
 		liquibase.setDataSource(dataSource);
 		liquibase.setChangeLog("classpath:config/liquibase/master.xml");

@@ -1,9 +1,0 @@
-version: '2'
-services:
-    patientbatchloader-mssql:
-        image: microsoft/mssql-server-linux:latest
-        environment:
-            - ACCEPT_EULA=Y
-            - SA_PASSWORD=Pass1word!
-        ports:
-            - 1433:1433

@@ -20,76 +20,78 @@ import javax.annotation.PostConstruct;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Provides configuration for the JVM metrics available, which are useful for
+ * monitoring the Spring Batch application.
+ */
 @Configuration
 @EnableMetrics(proxyTargetClass = true)
 public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
-    private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
-    private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
-    private static final String PROP_METRIC_REG_JVM_THREADS = "jvm.threads";
-    private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
-    private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
-    private static final String PROP_METRIC_REG_JVM_ATTRIBUTE_SET = "jvm.attributes";
+	private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
+	private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
+	private static final String PROP_METRIC_REG_JVM_THREADS = "jvm.threads";
+	private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
+	private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
+	private static final String PROP_METRIC_REG_JVM_ATTRIBUTE_SET = "jvm.attributes";
 
-    private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
+	private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
-    private MetricRegistry metricRegistry = new MetricRegistry();
+	private MetricRegistry metricRegistry = new MetricRegistry();
 
-    private HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
+	private HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
 
-    private final ApplicationProperties applicationProperties;
+	private final ApplicationProperties applicationProperties;
 
-    private HikariDataSource hikariDataSource;
+	private HikariDataSource hikariDataSource;
 
-    public MetricsConfiguration(ApplicationProperties applicationProperties) {
-        this.applicationProperties = applicationProperties;
-    }
+	public MetricsConfiguration(ApplicationProperties applicationProperties) {
+		this.applicationProperties = applicationProperties;
+	}
 
-    @Autowired(required = false)
-    public void setHikariDataSource(HikariDataSource hikariDataSource) {
-        this.hikariDataSource = hikariDataSource;
-    }
+	@Autowired(required = false)
+	public void setHikariDataSource(HikariDataSource hikariDataSource) {
+		this.hikariDataSource = hikariDataSource;
+	}
 
-    @Override
-    @Bean
-    public MetricRegistry getMetricRegistry() {
-        return metricRegistry;
-    }
+	@Override
+	@Bean
+	public MetricRegistry getMetricRegistry() {
+		return metricRegistry;
+	}
 
-    @Override
-    @Bean
-    public HealthCheckRegistry getHealthCheckRegistry() {
-        return healthCheckRegistry;
-    }
+	@Override
+	@Bean
+	public HealthCheckRegistry getHealthCheckRegistry() {
+		return healthCheckRegistry;
+	}
 
-    @PostConstruct
-    public void init() {
-        log.debug("Registering JVM gauges");
-        metricRegistry.register(PROP_METRIC_REG_JVM_MEMORY, new MemoryUsageGaugeSet());
-        metricRegistry.register(PROP_METRIC_REG_JVM_GARBAGE, new GarbageCollectorMetricSet());
-        metricRegistry.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
-        metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
-        metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
-        metricRegistry.register(PROP_METRIC_REG_JVM_ATTRIBUTE_SET, new JvmAttributeGaugeSet());
-        if (hikariDataSource != null) {
+	@PostConstruct
+	public void init() {
+		log.debug("Registering JVM gauges");
+		metricRegistry.register(PROP_METRIC_REG_JVM_MEMORY, new MemoryUsageGaugeSet());
+		metricRegistry.register(PROP_METRIC_REG_JVM_GARBAGE, new GarbageCollectorMetricSet());
+		metricRegistry.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
+		metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
+		metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS,
+				new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+		metricRegistry.register(PROP_METRIC_REG_JVM_ATTRIBUTE_SET, new JvmAttributeGaugeSet());
+		if (hikariDataSource != null) {
             log.debug("Monitoring the datasource");
             hikariDataSource.setMetricRegistry(metricRegistry);
         }
-        if (applicationProperties.getMetrics().getJmx().isEnabled()) {
-            log.debug("Initializing Metrics JMX reporting");
-            JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
-            jmxReporter.start();
-        }
-        if (applicationProperties.getMetrics().getLogs().isEnabled()) {
-            log.info("Initializing Metrics Log reporting");
-            Marker metricsMarker = MarkerFactory.getMarker("metrics");
-            final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
-                .outputTo(LoggerFactory.getLogger("metrics"))
-                .markWith(metricsMarker)
-                .convertRatesTo(TimeUnit.SECONDS)
-                .convertDurationsTo(TimeUnit.MILLISECONDS)
-                .build();
-            reporter.start(applicationProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
-        }
-    }
+		if (applicationProperties.getMetrics().getJmx().isEnabled()) {
+			log.debug("Initializing Metrics JMX reporting");
+			JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
+			jmxReporter.start();
+		}
+		if (applicationProperties.getMetrics().getLogs().isEnabled()) {
+			log.info("Initializing Metrics Log reporting");
+			Marker metricsMarker = MarkerFactory.getMarker("metrics");
+			final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
+					.outputTo(LoggerFactory.getLogger("metrics")).markWith(metricsMarker)
+					.convertRatesTo(TimeUnit.SECONDS).convertDurationsTo(TimeUnit.MILLISECONDS).build();
+			reporter.start(applicationProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
+		}
+	}
 }

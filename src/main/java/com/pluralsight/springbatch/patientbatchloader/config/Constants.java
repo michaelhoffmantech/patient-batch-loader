@@ -5,14 +5,33 @@ package com.pluralsight.springbatch.patientbatchloader.config;
  */
 public final class Constants {
 
-    public static final String SYSTEM_ACCOUNT = "system";
-    
-    public static final String DEFAULT_LANG_KEY = "en";
+	/**
+	 * Default system account used for all database interaction by the batch
+	 * processor
+	 */
+	public static final String SYSTEM_ACCOUNT = "system";
 
-    public static final String SPRING_PROFILE_DEVELOPMENT = "dev";
-    public static final String SPRING_PROFILE_PRODUCTION = "prod";
-    public static final String SPRING_PROFILE_NO_LIQUIBASE = "no-liquibase";
-    
-    private Constants() {
-    }
+	/**
+	 * Assure locale-specific instances leverage the same default
+	 */
+	public static final String DEFAULT_LANG_KEY = "en";
+
+	/**
+	 * Spring profile for running in "development mode"
+	 */
+	public static final String SPRING_PROFILE_DEVELOPMENT = "dev";
+
+	/**
+	 * Spring profile for running in "production mode"
+	 */
+	public static final String SPRING_PROFILE_PRODUCTION = "prod";
+
+	/**
+	 * Spring profile for not including liquibase database schema management at
+	 * run-time.
+	 */
+	public static final String SPRING_PROFILE_NO_LIQUIBASE = "no-liquibase";
+
+	private Constants() {
+	}
 }

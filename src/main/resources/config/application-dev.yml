@@ -18,16 +18,17 @@ logging:
 spring:
     profiles:
         active: dev
-    jackson:
-        serialization.indent_output: true
+    devtools:
+        restart:
+            enabled: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:file:./build/h2db/db/patientbatchloader;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:file:./h2db/db/patientbatchloader-dev;
         username: PatientBatchLoader
         password:
     h2:
         console:
-            enabled: false
+            enabled: true
     jpa:
         database-platform: com.pluralsight.springbatch.patientbatchloader.config.FixedH2Dialect
         database: H2

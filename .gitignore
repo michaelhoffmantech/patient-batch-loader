@@ -141,3 +141,4 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
+/h2db/

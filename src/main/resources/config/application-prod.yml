@@ -21,24 +21,21 @@ spring:
             enabled: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:sqlserver://localhost:1433;database=PatientBatchLoader
-        username: SA
-        password: Pass1word!
-        hikari:
-            data-source-properties:
-                cachePrepStmts: true
-                prepStmtCacheSize: 250
-                prepStmtCacheSqlLimit: 2048
-                useServerPrepStmts: true
+        url: jdbc:h2:file:./h2db/db/patientbatchloader-prod;
+        username: PatientBatchLoader
+        password:
+    h2:
+        console:
+            enabled: true
     jpa:
-        database-platform: org.hibernate.dialect.SQLServer2012Dialect
-        database: SQL_SERVER
-        show-sql: false
+        database-platform: com.pluralsight.springbatch.patientbatchloader.config.FixedH2Dialect
+        database: H2
+        show-sql: true
         properties:
             hibernate.id.new_generator_mappings: true
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
+            hibernate.generate_statistics: true
 
 liquibase:
     contexts: prod
@@ -51,5 +48,5 @@ application:
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         logs: # Reports Dropwizard metrics in the logs
-            enabled: false
+            enabled: true
             report-frequency: 60 # in seconds

@@ -8,7 +8,4 @@ services:
             - APP_SLEEP=30 
         ports:
             - 8080:8080
-    patientbatchloader-mssql:
-        extends:
-            file: mssql.yml
-            service: patientbatchloader-mssql
+            - 8082:8082

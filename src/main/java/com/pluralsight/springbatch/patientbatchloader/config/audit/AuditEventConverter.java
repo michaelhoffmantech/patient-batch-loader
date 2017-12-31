@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 
 import com.pluralsight.springbatch.patientbatchloader.domain.PersistentAuditEvent;
 
+/**
+ * Component for transforming between AuditEvents and PersistentAuditEvents
+ *
+ */
 @Component
 public class AuditEventConverter {
 
