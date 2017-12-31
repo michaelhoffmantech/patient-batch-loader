@@ -88,7 +88,6 @@ task testReport(type: TestReport) {
     reportOn test
 }
 
-apply from: 'gradle/docker.gradle'
 apply from: 'gradle/liquibase.gradle'
 
 if (project.hasProperty('prod')) {
