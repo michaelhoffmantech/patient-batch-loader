@@ -9,10 +9,9 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
 import com.pluralsight.springbatch.patientbatchloader.config.ApplicationProperties;
@@ -22,8 +21,7 @@ import com.pluralsight.springbatch.patientbatchloader.config.DefaultProfileUtil;
 /**
  * Main Spring Boot application definition. 
  */
-@ComponentScan
-@EnableAutoConfiguration
+@SpringBootApplication
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class PatientBatchLoaderApp {
 
