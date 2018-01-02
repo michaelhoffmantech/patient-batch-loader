@@ -2,6 +2,8 @@ package com.pluralsight.springbatch.patientbatchloader.config.audit;
 
 import com.pluralsight.springbatch.patientbatchloader.config.Constants;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class SystemAccountAuditorAware implements AuditorAware<String> {
 
     @Override
-    public String getCurrentAuditor() {
-        return Constants.SYSTEM_ACCOUNT;
+    public Optional<String> getCurrentAuditor() {
+        return Optional.of(Constants.SYSTEM_ACCOUNT);
     }
 }

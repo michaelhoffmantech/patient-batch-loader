@@ -1,15 +1,16 @@
 package com.pluralsight.springbatch.patientbatchloader.service;
 
-import com.pluralsight.springbatch.patientbatchloader.config.audit.AuditEventConverter;
-import com.pluralsight.springbatch.patientbatchloader.repository.PersistenceAuditEventRepository;
+import java.time.Instant;
+import java.util.Optional;
+
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.Optional;
+import com.pluralsight.springbatch.patientbatchloader.config.audit.AuditEventConverter;
+import com.pluralsight.springbatch.patientbatchloader.repository.PersistenceAuditEventRepository;
 
 /**
  * Service for managing audit events.
@@ -42,7 +43,7 @@ public class AuditEventService {
     }
 
     public Optional<AuditEvent> find(Long id) {
-        return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map
+        return Optional.ofNullable(persistenceAuditEventRepository.getOne(id)).map
             (auditEventConverter::convertToAuditEvent);
     }
 }
