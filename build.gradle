@@ -6,6 +6,8 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://repo.spring.io/libs-milestone" }
+        maven { url "https://repo.spring.io/libs-snapshot" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -15,7 +17,7 @@ buildscript {
 
 plugins {
     id "net.ltgt.apt" version "0.13"
-    id "io.spring.dependency-management" version "1.0.3.RELEASE"
+    id "io.spring.dependency-management" version "1.0.4.RELEASE"
 }
 
 apply plugin: 'java'
@@ -37,17 +39,17 @@ version = '0.0.1-SNAPSHOT'
 
 description = 'Spring Batch project for Pluralsight course'
 
-bootRepackage {
-   mainClass = 'com.pluralsight.springbatch.patientbatchloader.PatientBatchLoaderApp'
+jar {
+	enabled = true
 }
 
-jar {
-
+bootJar { 
+	classifier = 'boot'
+	launchScript() 
 }
 
 springBoot {
-    mainClass = 'com.pluralsight.springbatch.patientbatchloader.PatientBatchLoaderApp'
-    executable = true
+    mainClassName = 'com.pluralsight.springbatch.patientbatchloader.PatientBatchLoaderApp'
     buildInfo()
 }
 
@@ -66,7 +68,7 @@ if (OperatingSystem.current().isWindows()) {
     }
 
     bootRun {
-        addResources = false
+        sourceResources sourceSets.main
         dependsOn pathingJar
         doFirst {
             classpath = files("$buildDir/classes/java/main", "$buildDir/resources/main", pathingJar.archivePath)
@@ -74,7 +76,7 @@ if (OperatingSystem.current().isWindows()) {
     }
 } else {
     bootRun {
-        addResources = false
+        sourceResources sourceSets.main
     }
 }
 
@@ -104,6 +106,10 @@ configurations {
 repositories {
     mavenLocal()
     jcenter()
+    maven { url "http://repo.spring.io/plugins-release" }
+    maven { url "https://plugins.gradle.org/m2/" }
+    maven { url "https://repo.spring.io/libs-milestone" }
+    maven { url "https://repo.spring.io/libs-snapshot" }
 }
 
 dependencies {
@@ -130,7 +136,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework:spring-context-support"
     
-    testCompile "com.jayway.jsonpath:json-path"
     testCompile ("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
@@ -151,10 +156,10 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.4.1'
 }
 
-task stage(dependsOn: 'bootRepackage') {
+task stage(dependsOn: 'bootJar') {
 }
 
 compileJava.dependsOn processResources
