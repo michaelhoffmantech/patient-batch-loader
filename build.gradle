@@ -13,6 +13,8 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE"
     }
+	// Need to specify the release version until Boot 2 is RELEASE
+	ext['spring-batch.version'] = '4.0.0.RELEASE'
 }
 
 plugins {
@@ -135,6 +137,9 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-aop"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework:spring-context-support"
+	
+	// Starter to include the Spring Batch dependencies via Spring Boot
+	compile "org.springframework.boot:spring-boot-starter-batch"
     
     testCompile ("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
