@@ -21,6 +21,8 @@ spring:
     devtools:
         restart:
             enabled: true
+    jackson:
+        serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:file:./h2db/db/patientbatchloader-dev;
@@ -43,6 +45,9 @@ spring:
 
 liquibase:
     contexts: dev
+
+server:
+    port: 8080
 
 # ===================================================================
 # Application specific properties

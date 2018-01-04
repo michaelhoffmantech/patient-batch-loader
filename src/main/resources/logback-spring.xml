@@ -20,8 +20,8 @@
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    <logger name="com.codahale.metrics" level="WARN"/>
-    <logger name="com.ryantenney" level="WARN"/>
+    <logger name="com.codahale.metrics" level="INFO"/>
+    <logger name="com.ryantenney" level="INFO"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
     <logger name="org.apache" level="WARN"/>
@@ -30,8 +30,8 @@
     <logger name="org.hibernate.validator" level="WARN"/>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
-    <logger name="org.springframework" level="WARN"/>
-    <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.springframework.web" level="INFO"/>
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
     <logger name="sun.rmi" level="WARN"/>
