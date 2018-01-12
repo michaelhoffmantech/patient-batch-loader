@@ -15,6 +15,11 @@
 spring:
     application:
         name: PatientBatchLoader
+    batch: 
+        job: 
+            enabled: false
+        initializer: 
+            enabled: false
     profiles:
         # The commented value for `active` can be replaced with valid Spring profiles to load.
         # Otherwise, it will be filled in by gradle when building the WAR file
@@ -49,3 +54,5 @@ info:
 # ===================================================================
 
 application:
+    batch: 
+        inputPath: c:/input

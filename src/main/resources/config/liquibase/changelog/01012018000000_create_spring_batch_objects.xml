@@ -41,12 +41,8 @@
             <column name="CREATE_TIME" type="timestamp">
             	<constraints nullable="false" />
             </column>
-            <column name="START_TIME" type="timestamp">
-            	<constraints nullable="false" />
-            </column>
-            <column name="END_TIME" type="timestamp">
-            	<constraints nullable="false" />
-            </column>
+            <column name="START_TIME" type="timestamp" defaultValue="null"/>
+            <column name="END_TIME" type="timestamp" defaultValue="null"/>
             <column name="STATUS" type="VARCHAR(10)"/>
             <column name="EXIT_CODE" type="VARCHAR(2500)"/>
             <column name="EXIT_MESSAGE" type="VARCHAR(2500)"/>
@@ -101,9 +97,7 @@
             <column name="START_TIME" type="timestamp">
             	<constraints nullable="false" />
             </column>
-            <column name="END_TIME" type="timestamp">
-            	<constraints nullable="false" />
-            </column>
+            <column name="END_TIME" type="timestamp" defaultValue="null"/>
             <column name="STATUS" type="varchar(10)"/>
             <column name="COMMIT_COUNT" type="bigint"/>
             <column name="READ_COUNT" type="bigint"/>
