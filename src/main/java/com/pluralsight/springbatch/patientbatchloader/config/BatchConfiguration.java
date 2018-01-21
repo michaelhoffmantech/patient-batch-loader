@@ -4,6 +4,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.core.Job;
@@ -22,13 +25,13 @@ import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.batch.item.support.PassThroughItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
 
+import com.pluralsight.springbatch.patientbatchloader.domain.PatientEntity;
 import com.pluralsight.springbatch.patientbatchloader.domain.PatientRecord;
 import com.pluralsight.springbatch.patientbatchloader.job.PatientRecordItemWriter;
 
@@ -62,12 +65,14 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 	}
 
 	@Bean
-	public Step step(ItemReader<PatientRecord> itemReader) throws Exception {
+	public Step step(ItemReader<PatientRecord> itemReader, 
+		Function<PatientRecord, PatientEntity> processor) throws Exception {
 		return this.stepBuilderFactory
 			.get(Constants.STEP_NAME)
-			.<PatientRecord, PatientRecord>chunk(2)
+			.<PatientRecord, PatientEntity>chunk(2)
 			.reader(itemReader)
-			.processor(processor())
+			.processor(processor)
+			.writer(writer())
 			.build();
 	}
 
@@ -98,20 +103,34 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 	public FlatFileItemReader<PatientRecord> reader(
 		@Value("#{jobParameters['" + Constants.JOB_PARAM_FILE_NAME + "']}")String fileName) {
 		return new FlatFileItemReaderBuilder<PatientRecord>()
-				.name(Constants.ITEM_READER_NAME)
-				.resource(
-					new PathResource(
-						Paths.get(applicationProperties.getBatch().getInputPath() + 
-							File.separator + fileName)))
-				.linesToSkip(1)
-				.lineMapper(lineMapper())
-				.build();
+			.name(Constants.ITEM_READER_NAME)
+			.resource(
+				new PathResource(
+					Paths.get(applicationProperties.getBatch().getInputPath() + 
+						File.separator + fileName)))
+			.linesToSkip(1)
+			.lineMapper(lineMapper())
+			.build();
 	}
 	
 	@Bean
 	@StepScope
-	public PassThroughItemProcessor<PatientRecord> processor() {
-		return new PassThroughItemProcessor<>(); 
+	public Function<PatientRecord, PatientEntity> processor() {
+		return (patientRecord) ->  {
+			return new PatientEntity(
+				patientRecord.getSourceId(), 
+				patientRecord.getFirstName(), 
+				patientRecord.getMiddleInitial(), 
+				patientRecord.getLastName(), 
+				patientRecord.getEmailAddress(), 
+				patientRecord.getPhoneNumber(), 
+				patientRecord.getStreet(), 
+				patientRecord.getCity(), 
+				patientRecord.getState(), 
+				patientRecord.getZip(), 
+				LocalDate.parse(patientRecord.getBirthDate(), DateTimeFormatter.ofPattern("M/dd/yyyy")), 
+				patientRecord.getSsn());
+		}; 
 	}
 	
 	@Bean
@@ -134,4 +153,5 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 		mapper.setLineTokenizer(new DelimitedLineTokenizer());
 		return mapper; 
 	}
+	
 }

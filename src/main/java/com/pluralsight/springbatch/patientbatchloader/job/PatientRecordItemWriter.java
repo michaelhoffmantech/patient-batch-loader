@@ -5,10 +5,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.stereotype.Component;
 
-import com.pluralsight.springbatch.patientbatchloader.domain.PatientRecord;
+import com.pluralsight.springbatch.patientbatchloader.domain.PatientEntity;
 
-public class PatientRecordItemWriter implements ItemWriter<PatientRecord>{
+@Component
+public class PatientRecordItemWriter implements ItemWriter<PatientEntity> {
 
 	private static final Logger log = LoggerFactory.getLogger(PatientRecordItemWriter.class);
 	
@@ -16,9 +18,9 @@ public class PatientRecordItemWriter implements ItemWriter<PatientRecord>{
 	}
 	
 	@Override
-	public void write(List<? extends PatientRecord> items) throws Exception {
-		for (PatientRecord patientRecord : items) {
-			log.debug("Writing item: " + patientRecord.toString());
+	public void write(List<? extends PatientEntity> items) throws Exception {
+		for (PatientEntity patientEntity : items) {
+			log.debug("Writing item: " + patientEntity.toString());
 		}
 	}
 

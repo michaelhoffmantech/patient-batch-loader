@@ -1,9 +1,12 @@
 package com.pluralsight.springbatch.patientbatchloader.config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import com.pluralsight.springbatch.patientbatchloader.PatientBatchLoaderApp;
+import com.pluralsight.springbatch.patientbatchloader.domain.PatientEntity;
 import com.pluralsight.springbatch.patientbatchloader.domain.PatientRecord;
 
 @ContextConfiguration
@@ -37,6 +41,9 @@ public class BatchConfigurationTest {
 
 	@Autowired
 	private FlatFileItemReader<PatientRecord> reader;
+	
+	@Autowired
+	private Function<PatientRecord, PatientEntity> processor;
 
 	private JobParameters jobParameters;
 
@@ -89,5 +96,39 @@ public class BatchConfigurationTest {
 			fail(e.toString());
 		}
 		assertEquals(1, count);
+	}
+	
+	@Test
+	public void testProcessor() throws Exception {
+		PatientRecord patientRecord = new PatientRecord(
+			"72739d22-3c12-539b-b3c2-13d9d4224d40", 
+			"Hettie", 
+			"P", 
+			"Schmidt", 
+			"rodo@uge.li", 
+			"(805) 384-3727", 
+			"Hutij Terrace", 
+			"Kahgepu", 
+			"ID", 
+			"40239", 
+			"6/14/1961", 
+			"I", 
+			"071-81-2500");
+		PatientEntity entity = processor.apply(patientRecord);
+		assertNotNull(entity);
+		assertEquals("72739d22-3c12-539b-b3c2-13d9d4224d40", entity.getSourceId());
+		assertEquals("Hettie", entity.getFirstName());
+		assertEquals("P", entity.getMiddleInitial());
+		assertEquals("Schmidt", entity.getLastName());
+		assertEquals("rodo@uge.li", entity.getEmailAddress());
+		assertEquals("(805) 384-3727", entity.getPhoneNumber());
+		assertEquals("Hutij Terrace", entity.getStreet());
+		assertEquals("Kahgepu", entity.getCity());
+		assertEquals("ID", entity.getState());
+		assertEquals("40239", entity.getZipCode());
+		assertEquals(14, entity.getBirthDate().getDayOfMonth());
+		assertEquals(6, entity.getBirthDate().getMonthValue());
+		assertEquals(1961, entity.getBirthDate().getYear());
+		assertEquals("071-81-2500", entity.getSocialSecurityNumber());
 	}
 }
