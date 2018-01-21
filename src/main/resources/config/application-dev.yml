@@ -42,9 +42,9 @@ spring:
             hibernate.generate_statistics: true
     messages:
         cache-seconds: 1
-
-liquibase:
-    contexts: dev
+    liquibase:
+        contexts: dev
+        drop-first: true
 
 server:
     port: 8080

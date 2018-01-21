@@ -11,17 +11,26 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.JobParametersValidator;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.LineMapper;
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.support.PassThroughItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.PathResource;
+
+import com.pluralsight.springbatch.patientbatchloader.domain.PatientRecord;
+import com.pluralsight.springbatch.patientbatchloader.job.PatientRecordItemWriter;
 
 /**
  * Main configuration class for Spring Batch dependencies.
@@ -44,25 +53,21 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 	private ApplicationProperties applicationProperties; 
 
 	@Bean
-	public Job job() throws Exception {
+	public Job job(Step step) throws Exception {
 		return this.jobBuilderFactory
 			.get(Constants.JOB_NAME)
 			.validator(validator())
-			.start(step())
+			.start(step)
 			.build();
 	}
 
 	@Bean
-	public Step step() throws Exception {
+	public Step step(ItemReader<PatientRecord> itemReader) throws Exception {
 		return this.stepBuilderFactory
 			.get(Constants.STEP_NAME)
-			.tasklet(new Tasklet() {
-				@Override
-				public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-					System.err.println("Hello World!");
-					return RepeatStatus.FINISHED; 
-				}
-			})
+			.<PatientRecord, PatientRecord>chunk(2)
+			.reader(itemReader)
+			.processor(processor())
 			.build();
 	}
 
@@ -86,5 +91,47 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 				}
 			}
 		};
+	}
+	
+	@Bean
+	@StepScope
+	public FlatFileItemReader<PatientRecord> reader(
+		@Value("#{jobParameters['" + Constants.JOB_PARAM_FILE_NAME + "']}")String fileName) {
+		return new FlatFileItemReaderBuilder<PatientRecord>()
+				.name(Constants.ITEM_READER_NAME)
+				.resource(
+					new PathResource(
+						Paths.get(applicationProperties.getBatch().getInputPath() + 
+							File.separator + fileName)))
+				.linesToSkip(1)
+				.lineMapper(lineMapper())
+				.build();
+	}
+	
+	@Bean
+	@StepScope
+	public PassThroughItemProcessor<PatientRecord> processor() {
+		return new PassThroughItemProcessor<>(); 
+	}
+	
+	@Bean
+	@StepScope
+	public PatientRecordItemWriter writer() {
+		return new PatientRecordItemWriter(); 
+	}
+
+	@Bean
+	public LineMapper<PatientRecord> lineMapper() {
+		DefaultLineMapper<PatientRecord> mapper = new DefaultLineMapper<>(); 
+		mapper.setFieldSetMapper((fieldSet) -> new PatientRecord(
+			fieldSet.readString(0), fieldSet.readString(1), 
+			fieldSet.readString(2), fieldSet.readString(3), 
+			fieldSet.readString(4), fieldSet.readString(5), 
+			fieldSet.readString(6), fieldSet.readString(7), 
+			fieldSet.readString(8), fieldSet.readString(9), 
+			fieldSet.readString(10), fieldSet.readString(11), 
+			fieldSet.readString(12)));
+		mapper.setLineTokenizer(new DelimitedLineTokenizer());
+		return mapper; 
 	}
 }

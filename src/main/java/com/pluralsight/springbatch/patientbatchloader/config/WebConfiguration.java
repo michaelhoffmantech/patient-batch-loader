@@ -48,9 +48,10 @@ public class WebConfiguration implements ServletContextInitializer {
         log.info("Web application fully configured");
     }
 
-    @Bean
+	@Bean
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public ServletRegistrationBean h2servletRegistration(){
-        ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
+		ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
         registrationBean.addUrlMappings("/console/*");
         return registrationBean;
     }

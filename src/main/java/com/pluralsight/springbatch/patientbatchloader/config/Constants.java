@@ -47,6 +47,11 @@ public final class Constants {
 	 */
 	public static final String JOB_PARAM_FILE_NAME = "patient-batch-loader.fileName"; 
 	
+	/**
+	 * Item reader name for the job
+	 */
+	public static final String ITEM_READER_NAME = "patient-item-reader";
+	
 	private Constants() {
 	}
 }
