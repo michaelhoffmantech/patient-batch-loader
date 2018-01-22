@@ -4,9 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.persistence.EntityManagerFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +25,8 @@ import org.springframework.batch.test.StepScopeTestExecutionListener;
 import org.springframework.batch.test.StepScopeTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -29,6 +35,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import com.pluralsight.springbatch.patientbatchloader.PatientBatchLoaderApp;
 import com.pluralsight.springbatch.patientbatchloader.domain.PatientEntity;
 import com.pluralsight.springbatch.patientbatchloader.domain.PatientRecord;
+import com.pluralsight.springbatch.patientbatchloader.job.PatientRecordItemWriter;
 
 @ContextConfiguration
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, StepScopeTestExecutionListener.class })
@@ -44,6 +51,9 @@ public class BatchConfigurationTest {
 	
 	@Autowired
 	private Function<PatientRecord, PatientEntity> processor;
+	
+	@Autowired
+	private PatientRecordItemWriter writer;
 
 	private JobParameters jobParameters;
 
@@ -131,4 +141,26 @@ public class BatchConfigurationTest {
 		assertEquals(1961, entity.getBirthDate().getYear());
 		assertEquals("071-81-2500", entity.getSocialSecurityNumber());
 	}
+	
+	@Test
+	public void testWriter() throws Exception {
+		PatientEntity entity = new PatientEntity("72739d22-3c12-539b-b3c2-13d9d4224d40", 
+			"Hettie", 
+			"P", 
+			"Schmidt", 
+			"rodo@uge.li", 
+			"(805) 384-3727", 
+			"Hutij Terrace", 
+			"Kahgepu", 
+			"ID", 
+			"40239", 
+			LocalDate.of(1961, 6, 14), 
+			"071-81-2500");
+		StepExecution execution = MetaDataInstanceFactory.createStepExecution();
+        StepScopeTestUtils.doInStepScope(execution, () -> {
+            writer.write(Arrays.asList(entity));
+            return null;
+        });
+        System.err.println(entity.getId());
+    }
 }

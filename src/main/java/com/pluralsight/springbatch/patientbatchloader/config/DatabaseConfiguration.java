@@ -16,13 +16,14 @@ import liquibase.integration.spring.SpringLiquibase;
 
 /**
  * Database configurations for the spring batch application. For the purposes of
- * this course, I'm simply leveraing an H2 database; however, its recommended
+ * this course, I'm simply leveraging an H2 database; however, its recommended
  * that you using a real production database server for all non-development
  * implementations. Includes support for JPA auditing.
  *
  */
 @Configuration
-@EnableJpaRepositories("com.pluralsight.springbatch.patientbatchloader.repository")
+@EnableJpaRepositories(value = "com.pluralsight.springbatch.patientbatchloader.repository", 
+	entityManagerFactoryRef = "entityManagerFactory")
 @EnableJpaAuditing(auditorAwareRef = "systemAccountAuditorAware")
 @EnableTransactionManagement
 public class DatabaseConfiguration {
@@ -50,5 +51,5 @@ public class DatabaseConfiguration {
 			log.debug("Configuring Liquibase");
 		}
 		return liquibase;
-	}
+	}	
 }

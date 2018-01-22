@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Function;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -54,7 +56,10 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 	
 	@Autowired
 	private ApplicationProperties applicationProperties; 
-
+	
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
+	
 	@Bean
 	public Job job(Step step) throws Exception {
 		return this.jobBuilderFactory
@@ -136,7 +141,9 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 	@Bean
 	@StepScope
 	public PatientRecordItemWriter writer() {
-		return new PatientRecordItemWriter(); 
+		PatientRecordItemWriter writer = new PatientRecordItemWriter();
+		writer.setEntityManagerFactory(entityManagerFactory);
+		return writer; 
 	}
 
 	@Bean

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="GETDATE()" dbms="mssql"/>
+
+    <changeSet id="01022018000001" author="system">
+        <createTable tableName="patient">
+            <column name="patient_id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="source_id" type="VARCHAR(100)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="first_name" type="VARCHAR(100)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="middle_initial" type="VARCHAR(1)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="last_name" type="VARCHAR(100)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="email_address" type="VARCHAR(200)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="phone_number" type="VARCHAR(50)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="street" type="VARCHAR(255)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="city" type="VARCHAR(255)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="state" type="VARCHAR(100)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="zip_code" type="VARCHAR(20)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="birth_date" type="date">
+            	<constraints nullable="false" />
+            </column>
+            <column name="social_security_number" type="VARCHAR(20)">
+            	<constraints nullable="false" />
+            </column>
+        </createTable>	
+    </changeSet>
+</databaseChangeLog>
