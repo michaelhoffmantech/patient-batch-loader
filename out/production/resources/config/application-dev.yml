@@ -1,7 +1,7 @@
 # ===================================================================
-# Spring Boot configuration.
+# Spring Boot configuration for the "dev" profile.
 #
-# This configuration is used for unit/integration tests.
+# This configuration overrides the application.yml file.
 # ===================================================================
 
 # ===================================================================
@@ -11,47 +11,38 @@
 # ===================================================================
 
 spring:
-    application:
-        name: PatientBatchLoader
-    cache:
-        type: none
+    profiles:
+        active: dev
+    devtools:
+        restart:
+            enabled: true
+    jackson:
+        serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:PatientBatchLoader;DB_CLOSE_DELAY=-1
-        name:
-        username:
+        url: jdbc:h2:file:./h2db/db/patientbatchloader-dev;
+        username: PatientBatchLoader
         password:
+    h2:
+        console:
+            enabled: true
     jpa:
         database-platform: com.pluralsight.springbatch.patientbatchloader.config.FixedH2Dialect
         database: H2
-        open-in-view: false
-        show-sql: false
-        hibernate:
-            ddl-auto: none
-            naming:
-                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        show-sql: true
         properties:
             hibernate.id.new_generator_mappings: true
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.hbm2ddl.auto: validate
+    liquibase:
+        contexts: dev
+        drop-first: true
 
-liquibase:
-    contexts: test
-
-info:
-    project:
-        version: #project.version#
+server:
+    port: 8080
 
 # ===================================================================
 # Application specific properties
 # ===================================================================
 
-application:
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        logs: # Reports Dropwizard metrics in the logs
-            enabled: true
-            report-frequency: 60 # in seconds

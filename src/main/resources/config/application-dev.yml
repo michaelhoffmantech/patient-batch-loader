@@ -10,11 +10,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-logging:
-    level:
-        ROOT: DEBUG
-        com.pluralsight.springbatch.patientbatchloader: DEBUG
-        
 spring:
     profiles:
         active: dev
@@ -40,8 +35,6 @@ spring:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-    messages:
-        cache-seconds: 1
     liquibase:
         contexts: dev
         drop-first: true
@@ -53,9 +46,3 @@ server:
 # Application specific properties
 # ===================================================================
 
-application:
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        logs: # Reports Dropwizard metrics in the logs
-            enabled: true
-            report-frequency: 60 # in seconds

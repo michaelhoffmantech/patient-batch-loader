@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 @Table(name = "patient")
 public class PatientEntity implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
 	@SequenceGenerator(name = "sequenceGenerator")

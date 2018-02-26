@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="GETDATE()" dbms="mssql"/>
+
+    <changeSet id="01012018000001" author="system">
+        <createTable tableName="BATCH_JOB_INSTANCE">
+            <column name="JOB_INSTANCE_ID" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VERSION" type="bigint"/>
+            <column name="JOB_NAME" type="VARCHAR(100)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="JOB_KEY" type="VARCHAR(32)">
+            	<constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createIndex indexName="JOB_INST_UN"
+                     tableName="BATCH_JOB_INSTANCE"
+                     unique="true">
+            <column name="JOB_NAME" type="varchar(100)"/>
+            <column name="JOB_KEY" type="varchar(32)"/>
+        </createIndex>
+        
+        <createTable tableName="BATCH_JOB_EXECUTION">
+            <column name="JOB_EXECUTION_ID" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VERSION" type="bigint"/>
+            <column name="JOB_INSTANCE_ID" type="bigint">
+            	<constraints nullable="false" />
+            </column>
+            <column name="CREATE_TIME" type="timestamp">
+            	<constraints nullable="false" />
+            </column>
+            <column name="START_TIME" type="timestamp" defaultValue="null"/>
+            <column name="END_TIME" type="timestamp" defaultValue="null"/>
+            <column name="STATUS" type="VARCHAR(10)"/>
+            <column name="EXIT_CODE" type="VARCHAR(2500)"/>
+            <column name="EXIT_MESSAGE" type="VARCHAR(2500)"/>
+            <column name="LAST_UPDATED" type="timestamp"/>
+            <column name="JOB_CONFIGURATION_LOCATION" type="VARCHAR(2500)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="JOB_INSTANCE_ID"
+                                 baseTableName="BATCH_JOB_EXECUTION"
+                                 constraintName="JOB_INST_EXEC_FK"
+                                 referencedColumnNames="JOB_INSTANCE_ID"
+                                 referencedTableName="BATCH_JOB_INSTANCE"/>
+		
+		<createTable tableName="BATCH_JOB_EXECUTION_PARAMS">
+            <column name="JOB_EXECUTION_ID" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TYPE_CD" type="VARCHAR(6)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="KEY_NAME" type="VARCHAR(100)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="STRING_VAL" type="VARCHAR(250)"/>
+            <column name="DATE_VAL" type="timestamp" defaultValue="null"/>
+            <column name="LONG_VAL" type="bigint"/>
+            <column name="DOUBLE_VAL" type="double precision"/>
+            <column name="IDENTIFYING" type="CHAR(1)">
+            	<constraints nullable="false" />
+            </column>
+		</createTable>
+
+        <addForeignKeyConstraint baseColumnNames="JOB_EXECUTION_ID"
+                                 baseTableName="BATCH_JOB_EXECUTION_PARAMS"
+                                 constraintName="JOB_EXEC_PARAMS_FK"
+                                 referencedColumnNames="JOB_EXECUTION_ID"
+                                 referencedTableName="BATCH_JOB_EXECUTION"/>
+
+		<createTable tableName="BATCH_STEP_EXECUTION">
+            <column name="STEP_EXECUTION_ID" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VERSION" type="bigint">
+            	<constraints nullable="false" />
+            </column>
+            <column name="STEP_NAME" type="varchar(100)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="JOB_EXECUTION_ID" type="bigint">
+            	<constraints nullable="false" />
+            </column>
+            <column name="START_TIME" type="timestamp">
+            	<constraints nullable="false" />
+            </column>
+            <column name="END_TIME" type="timestamp" defaultValue="null"/>
+            <column name="STATUS" type="varchar(10)"/>
+            <column name="COMMIT_COUNT" type="bigint"/>
+            <column name="READ_COUNT" type="bigint"/>
+            <column name="FILTER_COUNT" type="bigint"/>
+            <column name="WRITE_COUNT" type="bigint"/>
+            <column name="READ_SKIP_COUNT" type="bigint"/>
+            <column name="WRITE_SKIP_COUNT" type="bigint"/>
+            <column name="PROCESS_SKIP_COUNT" type="bigint"/>
+            <column name="ROLLBACK_COUNT" type="bigint"/>
+            <column name="EXIT_CODE" type="varchar(2500)"/>
+            <column name="EXIT_MESSAGE" type="varchar(2500)"/>
+            <column name="LAST_UPDATED" type="timestamp"/>
+	</createTable>		
+
+    <addForeignKeyConstraint baseColumnNames="JOB_EXECUTION_ID"
+                             baseTableName="BATCH_STEP_EXECUTION"
+                             constraintName="JOB_EXEC_STEP_FK"
+                             referencedColumnNames="JOB_EXECUTION_ID"
+                             referencedTableName="BATCH_JOB_EXECUTION"/>
+	
+	<createTable tableName="BATCH_STEP_EXECUTION_CONTEXT">
+            <column name="STEP_EXECUTION_ID" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="SHORT_CONTEXT" type="varchar(2500)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="SERIALIZED_CONTEXT" type="LONGVARCHAR"/>
+	</createTable>
+
+    <addForeignKeyConstraint baseColumnNames="STEP_EXECUTION_ID"
+                             baseTableName="BATCH_STEP_EXECUTION_CONTEXT"
+                             constraintName="STEP_EXEC_CTX_FK"
+                             referencedColumnNames="STEP_EXECUTION_ID"
+                             referencedTableName="BATCH_STEP_EXECUTION"/>
+
+	<createTable tableName="BATCH_JOB_EXECUTION_CONTEXT">
+            <column name="JOB_EXECUTION_ID" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="SHORT_CONTEXT" type="varchar(2500)">
+            	<constraints nullable="false" />
+            </column>
+            <column name="SERIALIZED_CONTEXT" type="LONGVARCHAR"/>
+	</createTable>
+
+    <addForeignKeyConstraint baseColumnNames="JOB_EXECUTION_ID"
+                             baseTableName="BATCH_JOB_EXECUTION_CONTEXT"
+                             constraintName="JOB_EXEC_CTX_FK"
+                             referencedColumnNames="JOB_EXECUTION_ID"
+                             referencedTableName="BATCH_JOB_EXECUTION"/>
+	
+	<createSequence sequenceName="BATCH_STEP_EXECUTION_SEQ" />
+	<createSequence sequenceName="BATCH_JOB_EXECUTION_SEQ" />
+	<createSequence sequenceName="BATCH_JOB_SEQ" />
+	
+    </changeSet>
+</databaseChangeLog>

@@ -142,3 +142,5 @@ Desktop.ini
 ######################
 .eslintcache
 /h2db/
+/logs/
+/out/
