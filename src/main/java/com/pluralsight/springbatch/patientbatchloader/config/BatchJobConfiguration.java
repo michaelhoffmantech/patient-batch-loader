@@ -34,7 +34,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.PathResource;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import com.pluralsight.springbatch.patientbatchloader.domain.PatientEntity;
 import com.pluralsight.springbatch.patientbatchloader.domain.PatientRecord;
@@ -74,8 +73,7 @@ public class BatchJobConfiguration {
     @Bean
     public Step step(ItemReader<PatientRecord> itemReader,
                      Function<PatientRecord, PatientEntity> processor,
-                     JpaItemWriter<PatientEntity> writer,
-                     PlatformTransactionManager transactionManager) throws Exception {
+                     JpaItemWriter<PatientEntity> writer) throws Exception {
         return this.stepBuilderFactory
             .get(Constants.STEP_NAME)
             .<PatientRecord, PatientEntity>chunk(2)
