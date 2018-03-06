@@ -6,15 +6,11 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://repo.spring.io/libs-milestone" }
-        maven { url "https://repo.spring.io/libs-snapshot" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE"
     }
-	// Need to specify the release version until Boot 2 is RELEASE
-	ext['spring-batch.version'] = '4.0.0.RELEASE'
 }
 
 plugins {
@@ -45,9 +41,9 @@ jar {
 	enabled = true
 }
 
-bootJar { 
+bootJar {
 	classifier = 'boot'
-	launchScript() 
+	launchScript()
 }
 
 springBoot {
@@ -110,8 +106,6 @@ repositories {
     jcenter()
     maven { url "http://repo.spring.io/plugins-release" }
     maven { url "https://plugins.gradle.org/m2/" }
-    maven { url "https://repo.spring.io/libs-milestone" }
-    maven { url "https://repo.spring.io/libs-snapshot" }
 }
 
 dependencies {
@@ -122,7 +116,7 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations"
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner"
-    compile "org.hibernate:hibernate-core"        
+    compile "org.hibernate:hibernate-core"
     compile "com.zaxxer:HikariCP"
     compile "org.apache.commons:commons-lang3:${commons_lang_version}"
     compile "commons-io:commons-io:${commons_io_version}"
@@ -142,10 +136,10 @@ dependencies {
         exclude module: 'spring-boot-starter-tomcat'
     }
     compile "org.springframework.boot:spring-boot-starter-undertow"
-	
+
 	// Starter to include the Spring Batch dependencies via Spring Boot
 	compile "org.springframework.boot:spring-boot-starter-batch"
-    
+
     testCompile ("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
