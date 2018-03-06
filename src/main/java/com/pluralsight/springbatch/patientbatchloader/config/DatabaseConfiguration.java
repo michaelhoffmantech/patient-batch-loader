@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -31,7 +32,7 @@ import java.util.Properties;
  */
 @Configuration
 @EnableJpaRepositories(
-	value = "com.pluralsight.springbatch.patientbatchloader", 
+	value = "com.pluralsight.springbatch.patientbatchloader",
 	entityManagerFactoryRef = "batchEntityManagerFactory")
 @EnableTransactionManagement
 public class DatabaseConfiguration {
@@ -103,6 +104,13 @@ public class DatabaseConfiguration {
     @Bean(name = "batchTransactionManager")
     public PlatformTransactionManager transactionManager() {
         return new JpaTransactionManager(batchEntityManagerFactory().getObject());
+    }
+
+    @Bean
+    public MBeanExporter exporter() {
+        final MBeanExporter exporter = new MBeanExporter();
+        exporter.setExcludedBeans("batchDataSource");
+        return exporter;
     }
 
     @Bean
