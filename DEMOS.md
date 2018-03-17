@@ -6,7 +6,7 @@ Below are the full details of demos for the Pluralsight Spring Batch course. The
 
 [Demo 1]()
 
-[Demo 2](#demo-2-Gradle-Dependencies)
+[Demo 2](#demo-2-gradle-dependencies)
 
 #Demo 1: Project Download, IDE Setup and Execution
 
