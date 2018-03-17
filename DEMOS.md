@@ -8,11 +8,11 @@ Below are the full details of demos for the Pluralsight Spring Batch course. The
 
 [Demo 2](#demo-2-gradle-dependencies)
 
-#Demo 1: Project Download, IDE Setup and Execution
+# Demo 1: Project Download, IDE Setup and Execution
 
 In this demonstration, I'll be showing you how to get the demo project from GitHub. I'll walk you through cloning the project, adding the project to the IDE and then running it from a command line.
 
-##1.1 - Project Download
+## 1.1 - Project Download
 
 Let's start with downloading the project.
 
@@ -40,7 +40,7 @@ Let's start with downloading the project.
 
 Once this is complete, we have the initial copy of the application and can load it into our IDE.
 
-##1.2 - IDE Setup
+## 1.2 - IDE Setup
 
 Next, let's add the project to the Intellij IDEA IDE.
 
@@ -52,7 +52,7 @@ Next, let's add the project to the Intellij IDEA IDE.
 
 Once this is complete, we've successfully loaded the project template. Now, let's go back to the command line and try to run the application to assure it works. 
 
-##1.3 - Project Execution
+## 1.3 - Project Execution
 
 Now, let's try to run the application to assure its working.
 
@@ -70,7 +70,7 @@ Now, let's try to run the application to assure its working.
 
 Let's open back up the browser to perform a simple verification.
 
-##1.4 - Runtime Verification
+## 1.4 - Runtime Verification
 
 Finally, let's verify runtime. 
 
@@ -82,11 +82,11 @@ Finally, let's verify runtime.
 
 This completes setup of the template application. Now, let's look at its contents.
 
-#Demo 2 Gradle Dependencies
+# Demo 2 Gradle Dependencies
 
 In this demo, I'll walk you through adding the Spring Batch libraries to the demo application. These properties will be adding the Gradle build script in the dependencies section.
 
-##2.1 - Update Gradle Build Script
+## 2.1 - Update Gradle Build Script
 
 I'm going to show you how to add the Spring Batch libraries to the project. 
 
@@ -104,11 +104,11 @@ I'm going to show you how to add the Spring Batch libraries to the project.
 
 This completes dependency configuration.
 
-#Demo 3 - Spring Batch Configuration
+# Demo 3 - Spring Batch Configuration
 
 In this demo, I'll be covering the steps needed for a configuring Spring Batch to be available in the Spring Container of your project. 
 
-##3.1 - Creating the BatchConfiguration Class
+## 3.1 - Creating the BatchConfiguration Class
 
 I'm going to walk you through the creation of the BatchConfiguration class. Again, this configuration class will provide support for the Spring Batch Job Repository, Job Launcher and Job Explorer features. 
 
@@ -225,7 +225,7 @@ I'm going to walk you through the creation of the BatchConfiguration class. Agai
 
 That completes the configuration for the Spring Batch job explorer, job repository and job launcher. As part of configuration, there are also a few properties that we need to change. Let's do that now.
 
-##3.2 - Updating the Application Properties
+## 3.2 - Updating the Application Properties
 
 Spring and Spring Boot provide you with support for defining application properties to configure your project as well as your project dependencies. There are two properties that I want to add for support in the project moving forward.
 
@@ -271,7 +271,7 @@ Spring and Spring Boot provide you with support for defining application propert
 
 That completes the initial Spring Batch configuration. 
 
-#Demo 4 - Spring Batch JobRepository Database Schema Configuration
+# Demo 4 - Spring Batch JobRepository Database Schema Configuration
 
 I'll be demonstrating the addition of the Spring Batch JobRepository database schema for the required tables. 
 
@@ -478,7 +478,7 @@ I'll be demonstrating the addition of the Spring Batch JobRepository database sc
 
 This verifies the configuration of the Spring Batch database schema. 
 
-#Demo 5 - Spring Batch Job Configuration
+# Demo 5 - Spring Batch Job Configuration
 
 With Spring Batch configuration in place, the next step I'll demonstrate is the configuration of a Spring Batch job. The job will be responsible for loading patient data as input, processing it and then outputting it to a database. 
 
@@ -592,4 +592,4 @@ With Spring Batch configuration in place, the next step I'll demonstrate is the 
 
 That completes the demo for job creation. 
 
-#Demo 6 - 
+# Demo 6 - 
