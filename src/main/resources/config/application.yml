@@ -51,4 +51,4 @@ management:
 
 application:
     batch:
-        inputPath: c:/input
+        inputPath: c:/demo/patient-batch-loader/data
