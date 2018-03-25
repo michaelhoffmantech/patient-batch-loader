@@ -308,4 +308,23 @@ public class PatientEntity implements Serializable {
 		this.socialSecurityNumber = socialSecurityNumber;
 	}
 
+    @Override
+    public String toString() {
+        return "PatientEntity{" +
+            "id=" + id +
+            ", sourceId='" + sourceId + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", middleInitial='" + middleInitial + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", emailAddress='" + emailAddress + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", street='" + street + '\'' +
+            ", city='" + city + '\'' +
+            ", state='" + state + '\'' +
+            ", zipCode='" + zipCode + '\'' +
+            ", birthDate=" + birthDate +
+            ", socialSecurityNumber='" + socialSecurityNumber + '\'' +
+            '}';
+    }
+
 }
