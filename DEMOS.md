@@ -10,7 +10,7 @@ Below are the full details of demos for the Pluralsight Spring Batch course. The
 
 [Demo 3 - Spring Batch Configuration](#demo-3-spring-batch-configuration)
 
-[Demo 4 - Spring Batch JobRepository Database Schema Configuration](#demo-4-spring-batch-jobRepository-database-schema-configuration)
+[Demo 4 - Spring Batch JobRepository Database Schema Configuration](#demo-4-spring-batch-jobrepository-database-schema-configuration)
 
 [Demo 5 - Spring Batch Job Configuration](#demo-5-spring-batch-job-configuration)
 
@@ -38,15 +38,15 @@ Below are the full details of demos for the Pluralsight Spring Batch course. The
 
 [Demo 17 - Testing the Item Processor](#demo-17-testing-the-item-processor)
 
-[Demo 18 - Executing the Job with the Item Processor](#-demo-18-executing-the-job-with-the-item-processor)
+[Demo 18 - Executing the Job with the Item Processor](#demo-18-executing-the-job-with-the-item-processor)
 
 [Demo 19 - Adding the Patient Database Schema to the Liquibase Change Log](#demo-19-adding-the-patient-database-schema-to-the-liquibase-change-log)
 
-[Demo 20 - Implementing the JPA Item Writer](#-demo-20-implementing-the-jpa-item-writer)
+[Demo 20 - Implementing the JPA Item Writer](#demo-20-implementing-the-jpa-item-writer)
 
 [Demo 21 - Testing the Item Writer](#demo-21-testing-the-item-writer)
 
-[Demo 22 - Executing the Job with the Item Writer](#-demo-22-executing-the-job-with-the-item-writer)
+[Demo 22 - Executing the Job with the Item Writer](#demo-22-executing-the-job-with-the-item-writer)
 
 # Demo 1 Project Download, IDE Setup and Execution
 
