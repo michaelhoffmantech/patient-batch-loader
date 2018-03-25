@@ -46,7 +46,7 @@ import com.pluralsight.springbatch.patientbatchloader.repository.PatientReposito
 @SpringBootTest(classes = PatientBatchLoaderApp.class)
 @ActiveProfiles("dev")
 @Transactional
-public class BatchConfigurationTest {
+public class BatchJobConfigurationTest {
 
 	@Autowired
 	private Job job;
