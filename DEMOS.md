@@ -669,9 +669,11 @@ With the BatchJobConfiguration class defined, we simply want to start unit testi
     import org.springframework.boot.test.context.SpringBootTest;
     import org.springframework.test.context.junit4.SpringRunner;
     import com.pluralsight.springbatch.patientbatchloader.PatientBatchLoaderApp;
+    import org.springframework.test.context.ActiveProfiles;
     
     @RunWith(SpringRunner.class)
     @SpringBootTest(classes = PatientBatchLoaderApp.class)
+    @ActiveProfiles("dev")
     ```
 4. Next, autowire the configured job bean.
     ```
