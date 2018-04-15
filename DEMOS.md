@@ -229,7 +229,7 @@ I'm going to walk you through the creation of the BatchConfiguration class. Agai
     }
     ```
  17. I've configured the job repository to be created using a JobRepositoryFactoryBean. I set the batch data source and batch transaction manager to be used by the repository. Then, I call after properties set to ensure dependencies have been set. 
- 18. The final step is to configure a method to be called after dependency injection has been performed by the Spring container. This method will handle the actual bean configuration:
+ 18. The final step is to configure a method to be called after dependency injection has been performed by the Spring container. This method will handle the actual configuration of the bean:
     ```
     import javax.annotation.PostConstruct;
     import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
