@@ -233,6 +233,7 @@ I'm going to walk you through the creation of the BatchConfiguration class. Agai
     ```
     import javax.annotation.PostConstruct;
     import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
+    
     @PostConstruct
     public void afterPropertiesSet() throws Exception {
         this.jobRepository = createJobRepository();
