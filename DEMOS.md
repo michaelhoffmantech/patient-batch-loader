@@ -738,6 +738,8 @@ Now that the job is configured and unit tested, I want to verify job execution. 
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.GetMapping;
     import org.springframework.web.bind.annotation.PathVariable;
+    import java.util.Map;
+    import java.util.HashMap;
     
     @GetMapping("/{fileName:.+}")
     public ResponseEntity<String> runJob(@PathVariable String fileName) {
@@ -904,6 +906,7 @@ In this demo, I'll show you how to implement a stubbed out processor and writer 
     ```
     import org.springframework.batch.item.support.PassThroughItemProcessor;
     import org.springframework.batch.item.ItemWriter;
+    import java.util.List;
 
     @Bean
     @StepScope
