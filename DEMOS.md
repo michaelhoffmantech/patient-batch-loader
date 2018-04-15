@@ -230,20 +230,20 @@ I'm going to walk you through the creation of the BatchConfiguration class. Agai
     ```
  17. I've configured the job repository to be created using a JobRepositoryFactoryBean. I set the batch data source and batch transaction manager to be used by the repository. Then, I call after properties set to ensure dependencies have been set. 
  18. The final step is to configure a method to be called after dependency injection has been performed by the Spring container. This method will handle the actual bean configuration:
-     ```
+    ```
     import javax.annotation.PostConstruct;
     import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
 
-     @PostConstruct
-     public void afterPropertiesSet() throws Exception {
-         this.jobRepository = createJobRepository();
-         JobExplorerFactoryBean jobExplorerFactoryBean = new JobExplorerFactoryBean();
-         jobExplorerFactoryBean.setDataSource(this.batchDataSource);
-         jobExplorerFactoryBean.afterPropertiesSet();
-         this.jobExplorer = jobExplorerFactoryBean.getObject();
-         this.jobLauncher = createJobLauncher();
-     }
-     ```
+    @PostConstruct
+    public void afterPropertiesSet() throws Exception {
+        this.jobRepository = createJobRepository();
+        JobExplorerFactoryBean jobExplorerFactoryBean = new JobExplorerFactoryBean();
+        jobExplorerFactoryBean.setDataSource(this.batchDataSource);
+        jobExplorerFactoryBean.afterPropertiesSet();
+        this.jobExplorer = jobExplorerFactoryBean.getObject();
+        this.jobLauncher = createJobLauncher();
+    }
+    ```
 19. Now as part of initialization, we will set the job repository, job explorer and job launcher. I'll use the job explorer factory bean to set the data source on the job explorer instance. 
 
 That completes the configuration for the Spring Batch job explorer, job repository and job launcher. As part of configuration, there are also a few properties that we need to change. Let's do that now.
